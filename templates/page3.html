@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/header-main.jpg') }}" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="page1">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+         <a href="page2">
+             <i class="fas fa-heartbeat"></i> Heart Disease
+         </a>
+
+         <a href="page3">
+             <i class="fas fa-brain"></i> Parkinson Disease
+         </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+         <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+
+
+    </div>
+
+
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <div class="main-content">
+      <form id="knn-form">
+        <h1>Heart Disease Prediction</h1>
+        <div class="form-rowfour">
+          <div>
+              <label for="MDVP:Fo(Hz)">MDVP:Fo(Hz):</label>
+              <input type="number" id="MDVP:Fo(Hz)" name="MDVP:Fo(Hz)" required>
+          </div>
+          <div>
+              <label for="MDVP:Fhi(Hz)">MDVP:Fhi(Hz):</label>
+              <input type="number" id="MDVP:Fhi(Hz)" name="MDVP:Fhi(Hz)" required>
+          </div>
+          <div>
+              <label for="MDVP:Flo(Hz)">MDVP:Flo(Hz)</label>
+              <input type="number" id="MDVP:Flo(Hz)" name="MDVP:Flo(Hz)" required>
+          </div>
+          <div>
+              <label for="MDVP:Jitter(%)">MDVP:Jitter(%)</label>
+              <input type="number" id="MDVP:Jitter(%)" name="MDVP:Jitter(%)" required>
+          </div>
+        </div>
+        <div class="form-rowfour">
+          <div>
+              <label for="Jitter:DDP">Jitter:DDP:</label>
+              <input type="number" id="Jitter:DDP" name="Jitter:DDP" required>
+          </div>
+          <div>
+              <label for="Shimmer:APQ5">Shimmer:APQ5</label>
+              <input type="number" id="Shimmer:APQ5" name="Shimmer:APQ5" required>
+          </div>
+          <div>
+              <label for="HNR">HNR</label>
+              <input type="number" id="HNR" name="HNR" required>
+          </div>
+          <div>
+              <label for="spread1">spread1</label>
+              <input type="number" id="spread1" name="spread1" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+              <label for="spread2">spread2</label>
+              <input type="number" id="spread2" name="spread2" required>
+          </div>
+          <div>
+              <label for="PPE">PPE</label>
+              <input type="number" id="PPE" name="PPE" required>
+          </div>
+        </div>
+           <div class="form-submit">
+            <button type="submit">Make Prediction</button>
+           </div>
+      </form>
+    </div>
+    <div class="result-row">
+      <div id="Parkinson" class="result-box"> The Result </div>
+    </div>
+    <footer>
+        <p>Create this model by Amaar AlSaman <i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+    function openNav() {
+        document.getElementById("mySidebar").classList.add("open");
+        document.querySelector(".openbtn").classList.add("hidden");
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").classList.remove("open");
+        document.querySelector(".openbtn").classList.remove("hidden");
+    }
+
+document.getElementById('knn-form').onsubmit = async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const formObject = Object.fromEntries(formData.entries());
+
+        const ParkinsonBox = document.getElementById('Parkinson');
+
+        try {
+            const response = await fetch('/page3', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject),
+            });
+
+            const result = await response.json();
+            ParkinsonBox.textContent = result.Parkinson;
+
+            if (result.Parkinson.includes('Have Parkinson')) {
+                ParkinsonBox.className = 'result-box high-risk';
+            }  if (result.Parkinson.includes('Do Not Have Parkinson')) {
+                ParkinsonBox.className = 'result-box low-risk';
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            diagnosisBox.textContent = 'Error Occurred';
+            diagnosisBox.className = 'result-box high-risk';
+        }
+};
+
+
+
+</script>
+</body>
+</html>

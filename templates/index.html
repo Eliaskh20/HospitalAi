@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Model Predictions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #f9ae6d 30%, #FFFFFF 70%);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333;
+        height: 100%;
+    }
+
+    header {
+        text-align: center;
+        position: relative;
+        width: 100%;
+    }
+
+    header img {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        display: block;
+    }
+
+    header h1 {
+        font-family: "Tajawal", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        color: #1f2937;
+        font-size: 30px;
+        font-size: 1.9rem;
+        text-shadow: 1px 1px 3px rgba(31, 41, 55, 0.9);
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    header h3 {
+        font-family: "Tajawal", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        color: #1f2937;
+        font-size: 24px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    main {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        text-align: center;
+        max-width: 1300px;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(226, 232, 240);
+        width: calc(33% - 15px);
+        max-width: 300px;
+        height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        color: #1F2937;
+    }
+
+    .card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h2 {
+        font-size: 19px;
+        color: #1F2937;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #1F2937;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .card a {
+        background-color: rgba(251, 146, 60, 0);
+        color: #1F2937;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 6px;
+        border: 2px solid rgba(251, 146, 60, 1);
+        font-weight: 700;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .card a:hover {
+        color: white;
+        background-color: rgba(251, 146, 60, 1);
+        transform: scale(1.08);
+    }
+
+    .card .details {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70%;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+        overflow: auto;
+        border-radius: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card .details p {
+        color: white;
+        font-size: 16px;
+    }
+
+    .card:hover .details {
+        display: flex;
+    }
+
+    .project_name {
+        font-family: "Tajawal", sans-serif;
+        font-weight: 700;
+        color: #1f2937;
+        font-size: 50px;
+        text-shadow: 1px 1px 3px rgba(31, 41, 55, 0.5);
+        margin: 20px 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    footer{
+        text-align: center;
+        color: #F9931F;
+
+    }
+    .FBox {
+        background-color: rgb(226, 232, 240);
+        box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        color: #333;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #ddd;
+    }
+
+    .services_title {
+        font-family: "Tajawal", sans-serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #F9931F;
+        margin-bottom: 15px;
+    }
+
+    .services_description {
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        text-align: right; /* لتوسيع النص في الوسط */
+        max-width: 800px; /* تحديد عرض أقصى للنص */
+        margin: 0 auto; /* موازنة النص في الوسط */
+    }
+
+    .services_description ul {
+        list-style-type: none; /* إزالة النقاط */
+        padding: 0;
+        margin: 0;
+    }
+
+    .services_description li {
+        margin-bottom: 10px;
+    }
+
+    .services_description li strong {
+        color: #1f2937;
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            width: calc(45% - 20px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .card {
+            width: calc(100% - 40px);
+        }
+    }
+
+    </style>
+
+</head>
+<body>
+    <header>
+       <img src="static/img/header-main.jpg" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <main>
+         <div class="card">
+            <h2>تقييم مخاطر مستويات الجلوكوز في الدم</h2>
+            <p>توقع مخاطر مستويات الجلوكوز في الدم.</p>
+            <a href="{{ url_for('page1') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    استخدم أداة تقييم مخاطر مستويات الجلوكوز في الدم لتحليل حالتك الصحية. توفر هذه الأداة رؤى حول احتمالية ارتفاع أو انخفاض مستويات الجلوكوز، مما يساعد في إدارة مرض السكري بشكل أكثر فعالية.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>توقع مخاطر الإصابة بأمراض القلب</h2>
+            <p>استخدم نموذجنا لتوقع مخاطر الإصابة بأمراض القلب.</p>
+            <a href="{{ url_for('page2') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    استخدم نموذجنا لتقييم مخاطر الإصابة بأمراض القلب بدقة. يقوم بتحليل بياناتك الصحية لتحديد العوامل التي قد تشير إلى أمراض القلب، مما يساعد في الكشف المبكر وتحسين الاستراتيجيات الوقائية.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>تقييم مخاطر الإصابة بمرض باركنسون</h2>
+            <p>استخدم نموذجنا لتوقع مخاطر الإصابة بمرض باركنسون.</p>
+            <a href="{{ url_for('page3') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    تقييم مخاطر الإصابة بمرض باركنسون باستخدام أدوات تحليل متقدمة. توفر هذه الأداة تقديرات دقيقة للمخاطر بناءً على بيانات صحية متنوعة، مما يساهم في الكشف المبكر وإدارة المرض بشكل فعال.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>تقييم مخاطر الإصابة بأمراض الغدة الدرقية</h2>
+            <p>استخدم نموذجنا لتوقع مخاطر الإصابة بأمراض الغدة الدرقية.</p>
+            <a href="{{ url_for('page4') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    استخدم أداة تقييم مخاطر الإصابة بأمراض الغدة الدرقية لتحليل حالتك الصحية. تقوم هذه الأداة بتقدير المخاطر بناءً على بيانات صحية متنوعة، مما يساعد في الكشف المبكر وتحسين إدارة الحالة.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>تقييم مخاطر الإصابة بالتهاب الكبد</h2>
+            <p>استخدم نموذجنا لتوقع مخاطر الإصابة بالتهاب الكبد.</p>
+            <a href="{{ url_for('page5') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    تقييم مخاطر الإصابة بالتهاب الكبد باستخدام أدوات تحليل دقيقة. توفر هذه الأداة تقديرات شاملة للمخاطر بناءً على بيانات صحية متنوعة، مما يساعد في الكشف المبكر والوقاية الفعالة.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>تقييم مخاطر الإصابة بالاكتئاب</h2>
+            <p>استخدم نموذجنا لتوقع مخاطر الإصابة بالاكتئاب.</p>
+            <a href="{{ url_for('page6') }}">ابدأ الآن</a>
+            <div class="details">
+                <p>
+                    استخدم نموذج تقييم مخاطر الاكتئاب لتحليل حالتك النفسية بدقة. يقوم هذا النموذج بتحليل البيانات لتحديد العلامات والأعراض المرتبطة بالاكتئاب، مما يوفر رؤى مبكرة وموارد لدعم صحتك النفسية.
+                </p>
+            </div>
+        </div>
+
+    </main>
+<footer>
+    <h2 class="services_title">خدماتنا</h2>
+    <div class="FBox">
+        <h3>        تقدم شركتنا مجموعة متنوعة من الخدمات الطبية المتقدمة</h3>
+        <div class="services_description">
+            <ul>
+                <li><strong>تقييم مخاطر مستويات الجلوكوز في الدم:</strong> تحليل المخاطر المتعلقة بمستويات الجلوكوز في الدم.</li>
+                <li><strong>توقع مخاطر الإصابة بأمراض القلب:</strong> تقييم دقيق لمخاطر الإصابة بأمراض القلب.</li>
+                <li><strong>تقييم مخاطر مرض باركنسون:</strong> أدوات تحليل لتقدير مخاطر الإصابة بمرض باركنسون.</li>
+                <li><strong>تقييم مخاطر الأمراض الدرقية:</strong> تقدير المخاطر المتعلقة بأمراض الغدة الدرقية.</li>
+                <li><strong>تقييم مخاطر التهاب الكبد:</strong> تحليل شامل لمخاطر الإصابة بالتهاب الكبد.</li>
+                <li><strong>تقييم مخاطر الاكتئاب:</strong> تحليل بيانات لتحديد علامات الاكتئاب.</li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+</body>
+</html>

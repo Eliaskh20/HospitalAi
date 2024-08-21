@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/header-main.jpg') }}" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="{{ url_for('page1') }}">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+        <a href="{{ url_for('page2') }}">
+            <i class="fas fa-heartbeat"></i> Heart Disease
+        </a>
+
+        <a href="{{ url_for('page3') }}">
+            <i class="fas fa-brain"></i> Parkinson Disease
+        </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+        <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+    </div>
+
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <div class="main-content">
+        <form id="knn-form" action="{{ url_for('page2') }}" method="post">
+            <h1>Heart Disease Prediction</h1>
+            <div class="form-rowfour">
+                <div>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="Age" required>
+                </div>
+                <div>
+                    <label for="sex">Sex:</label>
+                    <select id="sex" name="Sex" required>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="chestPainType">Chest Pain Type:</label>
+                    <select id="chestPainType" name="ChestPainType" required>
+                        <option value="1">Typical Angina</option>
+                        <option value="2">Atypical Angina</option>
+                        <option value="3">Non-anginal Pain</option>
+                        <option value="4">Asymptomatic</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="restingBP">Resting Blood Pressure:</label>
+                    <input type="number" id="restingBP" name="RestingBP" required>
+                </div>
+            </div>
+            <div class="form-rowfour">
+                <div>
+                    <label for="cholesterol">Cholesterol:</label>
+                    <input type="number" id="cholesterol" name="Cholesterol" required>
+                </div>
+                <div>
+                    <label for="fastingBS">FastingBS:</label>
+                    <select id="fastingBS" name="FastingBS" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="restingECG">Resting ECG:</label>
+                    <select id="restingECG" name="RestingECG" required>
+                        <option value="0">Normal</option>
+                        <option value="1">ST-T Wave Abnormality</option>
+                        <option value="2">Left Ventricular Hypertrophy</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="maxHR">Maximum Heart Rate:</label>
+                    <input type="number" id="maxHR" name="MaxHR" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="exerciseAngina">Exercise Angina:</label>
+                    <select id="exerciseAngina" name="ExerciseAngina" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="oldpeak">Oldpeak:</label>
+                    <input type="number" id="oldpeak" name="Oldpeak" step="0.1" required>
+                </div>
+                <div>
+                    <label for="stSlope">ST Slope:</label>
+                    <select id="stSlope" name="ST_Slope" required>
+                        <option value="1">Upsloping</option>
+                        <option value="2">Flat</option>
+                        <option value="3">Downsloping</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-submit">
+                <button type="submit">Make Prediction</button>
+            </div>
+        </form>
+    </div>
+    <div class="result-row">
+        <div id="diagnosis" class="result-box">The Result</div>
+    </div>
+    <footer>
+        <p>Create this model by Niaz AlNajar <i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").classList.add("open");
+            document.querySelector(".openbtn").classList.add("hidden");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("open");
+            document.querySelector(".openbtn").classList.remove("hidden");
+        }
+
+        document.getElementById('knn-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const diagnosisBox = document.getElementById('diagnosis');
+
+            try {
+                const response = await fetch('{{ url_for('page2') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const result = await response.json();
+                diagnosisBox.textContent = result.diagnosis;
+
+                if (result.diagnosis.includes('High Risk Detected')) {
+                    diagnosisBox.className = 'result-box high-risk';
+                } else {
+                    diagnosisBox.className = 'result-box low-risk';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                diagnosisBox.textContent = 'Error Occurred';
+                diagnosisBox.className = 'result-box high-risk';
+            }
+        };
+    </script>
+</body>
+</html>

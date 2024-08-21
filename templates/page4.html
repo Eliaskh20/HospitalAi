@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thyroid Disease Prediction</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/header-main.jpg') }}" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="page1">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+         <a href="page2">
+             <i class="fas fa-heartbeat"></i> Heart Disease
+         </a>
+
+         <a href="page3">
+             <i class="fas fa-brain"></i> Parkinson Disease
+         </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+        <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+
+
+    </div>
+
+<button class="openbtn" onclick="openNav()">☰</button>
+    <div class="main-content">
+        <form id="knn-form" action="{{ url_for('page4') }}" method="post">
+                    <h1>Thyroid Disease Prediction</h1>
+
+            <div class="form-row">
+                <div>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age">
+                </div>
+                <div>
+                    <label for="sex">Sex:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="TT4">TT4:</label>
+                    <input type="number" id="TT4" name="TT4" step="0.01">
+                </div>
+                <div>
+                    <label for="T3">T3:</label>
+                    <input type="number" id="T3" name="T3" step="0.01">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="T4U">T4U:</label>
+                    <input type="number" id="T4U" name="T4U" step="0.01">
+                </div>
+                <div>
+                    <label for="FTI">FTI:</label>
+                    <input type="number" id="FTI" name="FTI" step="0.01">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="TSH">TSH:</label>
+                    <input type="number" id="TSH" name="TSH" step="0.01">
+                </div>
+                <div>
+                    <label for="pregnant">Pregnant:</label>
+                    <select id="pregnant" name="pregnant" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-submit">
+                 <button type="submit">Make Prediction</button>
+            </div>
+        </form>
+    </div>
+    <div class="result-row">
+        <div id="resul" class="result-box"> The Result </div>
+    </div>
+    <footer>
+     <p>Create this model by Aiman AlShaar <i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").classList.add("open");
+            document.querySelector(".openbtn").classList.add("hidden");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("open");
+            document.querySelector(".openbtn").classList.remove("hidden");
+        }
+
+
+
+        document.getElementById('knn-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const diagnosisBox = document.getElementById('resul');
+
+            try {
+                const response = await fetch('/page4', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const result = await response.json();
+                diagnosisBox.textContent = result.diagnosis;
+
+                if (result.diagnosis.includes('normal condition and does not suffer from any thyroid problems')) {
+                    diagnosisBox.className = 'result-box low-risk';
+                } else {
+                    diagnosisBox.className = 'result-box high-risk';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                diagnosisBox.textContent = 'Error Occurred';
+                diagnosisBox.className = 'result-box high-risk';
+            }
+        };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Glucose Prediction</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+       <img src="static/img/header-main.jpg" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>  
+
+        <a href="page1">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+         <a href="page2">
+             <i class="fas fa-heartbeat"></i> Heart Disease
+         </a>
+
+         <a href="page3">
+             <i class="fas fa-brain"></i> Parkinson Disease
+         </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+         <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+
+
+    </div>
+
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <div class="main-content">
+
+            <form id="svm-form" action="{{ url_for('page1') }}" method="post">
+                <h1>Blood Glucose Prediction</h1>
+                <div class="form-row">
+
+                    <div>
+                        <label for="Pregnancies">Pregnancies:</label>
+                        <input type="number" id="Pregnancies" name="Pregnancies" required>
+                    </div>
+                    <div>
+                        <label for="Glucose">Glucose:</label>
+                        <input type="number" id="Glucose" name="Glucose" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="BloodPressure">Blood Pressure:</label>
+                        <input type="number" id="BloodPressure" name="BloodPressure" required>
+                    </div>
+                    <div>
+                        <label for="SkinThickness">Skin Thickness:</label>
+                        <input type="number" id="SkinThickness" name="SkinThickness" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="Insulin">Insulin:</label>
+                        <input type="number" id="Insulin" name="Insulin" required>
+                    </div>
+                    <div>
+                        <label for="BMI">BMI:</label>
+                        <input type="number" step="0.1" id="BMI" name="BMI" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function:</label>
+                        <input type="number" step="0.01" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" required>
+                    </div>
+                    <div>
+                        <label for="Age">Age:</label>
+                        <input type="number" id="Age" name="Age" required>
+                    </div>
+                </div>
+               <div class="form-submit">
+                    <button type="submit">Make Prediction</button>
+                </div>
+            </form>
+        </div>
+    <div class="result-row">
+        <div class="result-box" id="knnResult">The Result</div>
+    </div>
+    <footer>
+      <p>Create this model by Elias Alkharma <i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+
+      function openNav() {
+            document.getElementById("mySidebar").classList.add("open");
+            document.querySelector(".openbtn").classList.add("hidden");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("open");
+            document.querySelector(".openbtn").classList.remove("hidden");
+        }
+
+        
+
+
+
+
+
+
+        document.getElementById('svm-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const data = {
+                Pregnancies: Number(formObject.Pregnancies),
+                Glucose: Number(formObject.Glucose),
+                BloodPressure: Number(formObject.BloodPressure),
+                SkinThickness: Number(formObject.SkinThickness),
+                Insulin: Number(formObject.Insulin),
+                BMI: Number(formObject.BMI),
+                DiabetesPedigreeFunction: Number(formObject.DiabetesPedigreeFunction),
+                Age: Number(formObject.Age)
+            };
+
+            const response = await fetch(event.target.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const knnResult = document.getElementById('knnResult');
+
+
+
+            if (response.ok) {
+
+
+                knnResult.textContent = `KNN: ${result.blood_glucose_prediction === 1 ? 'High Risk Of Diabetes' : 'Low Risk Of Diabetes'}`;
+                knnResult.className = result.blood_glucose_prediction === 1 ? 'result-box high-risk' : 'result-box low-risk';
+            } else {
+                knnResult.textContent = `Error: ${result.error}`;
+            }
+        };
+    </script>
+</body>
+</html>
