@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asthma Prediction</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <img
+        src="{{ url_for('static', filename='img/header-main.jpg') }}"
+        alt="Header Image"
+      />
+      <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+      <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+      <button class="closebtn" onclick="closeNav()">&times;</button>
+
+      <a href="{{ url_for('index') }}"> <i class="fas fa-home"></i> Home </a>
+
+      <a href="page1"> <i class="fas fa-vial"></i> Blood Glucose </a>
+      <a href="page2"> <i class="fas fa-heartbeat"></i> Heart Disease </a>
+
+      <a href="page3"> <i class="fas fa-brain"></i> Parkinson Disease </a>
+      <a href="{{ url_for('page4') }}">
+        <i class="fas fa-pills"></i> Thyroid Disease
+      </a>
+      <a href="{{ url_for('page5') }}">
+        <i class="fas fa-virus"></i> Hepatitis Disease
+      </a>
+      <a href="{{ url_for('page6') }}">
+        <i class="fas fa-poll"></i> Depression Test
+      </a>
+    </div>
+
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <div class="main-content">
+      <form id="knn-form" action="{{ url_for('page12') }}" method="post">
+        <h1>Asthma Prediction</h1>
+
+        <div class="form-row">
+          <div>
+            <label for="Age">Age:</label>
+            <input type="number" id="Age" name="Age" required />
+          </div>
+          <div>
+            <label for="Gender">Gender:</label>
+            <select id="Gender" name="Gender" required>
+              <option value="1">Male</option>
+              <option value="0">Female</option>
+            </select>
+          </div>
+          <div>
+            <label for="Ethnicity">Ethnicity:</label>
+            <input type="number" id="Ethnicity" name="Ethnicity" required />
+          </div>
+          <div>
+            <label for="Smoking">Smoking:</label>
+            <input type="number" id="Smoking" name="Smoking" required />
+          </div>
+          <div>
+            <label for="PhysicalActivity">PhysicalActivity:</label>
+            <input
+              type="number"
+              id="PhysicalActivity"
+              name="PhysicalActivity"
+              step="0.1"
+              required
+            />
+          </div>
+          <div>
+            <label for="DietQuality">DietQuality:</label>
+            <input type="number" id="DietQuality" name="DietQuality" step="0.1" required />
+          </div>
+          <div>
+            <label for="SleepQuality">SleepQuality:</label>
+            <input
+              type="number"
+              id="SleepQuality"
+              name="SleepQuality"
+              step="0.1"
+              required
+            />
+          </div>
+          <div>
+            <label for="PollenExposure">PollenExposure:</label>
+            <input
+              type="number"
+              id="PollenExposure"
+              name="PollenExposure"
+              step="0.1"
+              required
+            />
+          </div>
+          <div>
+            <label for="DustExposure">DustExposure:</label>
+            <input
+              type="number"
+              id="DustExposure"
+              name="DustExposure"
+              step="0.1"
+              required
+            />
+          </div>
+          <div>
+            <label for="FamilyHistoryAsthma">FamilyHistoryAsthma:</label>
+            <input
+              type="number"
+              step="0.1"
+              id="FamilyHistoryAsthma"
+              name="FamilyHistoryAsthma"
+              required
+            />
+          </div>
+          <div>
+            <label for="HistoryOfAllergies">HistoryOfAllergies:</label>
+            <input
+              type="number"
+              id="HistoryOfAllergies"
+              name="HistoryOfAllergies"
+              required
+            />
+          </div>
+          <div>
+            <label for="Eczema">Eczema:</label>
+            <input type="number" id="Eczema" name="Eczema" required />
+          </div>
+          <div>
+            <label for="HayFever">HayFever:</label>
+            <input type="number" id="HayFever" name="HayFever" required />
+          </div>
+          <div>
+            <label for="GastroesophagealReflux">GastroesophagealReflux:</label>
+            <input
+              type="number"
+              id="GastroesophagealReflux"
+              name="GastroesophagealReflux"
+              required
+            />
+          </div>
+          <div>
+            <label for="LungFunctionFEV1">LungFunctionFEV1:</label>
+            <input
+              type="number"
+              id="LungFunctionFEV1"
+              name="LungFunctionFEV1"
+              step="0.1"
+              required
+            />
+          </div>
+          <div>
+            <label for="Wheezing">Wheezing:</label>
+            <input type="number" id="Wheezing" name="Wheezing" required />
+          </div>
+          <div>
+            <label for="ChestTightness">ChestTightness:</label>
+            <input
+              type="number"
+              id="ChestTightness"
+              name="ChestTightness"
+              required
+            />
+          </div>
+          <div>
+            <label for="Coughing">Coughing:</label>
+            <input type="number" id="Coughing" name="Coughing" required />
+          </div>
+          <div>
+            <label for="NighttimeSymptoms">NighttimeSymptoms:</label>
+            <input type="number" id="NighttimeSymptoms" name="NighttimeSymptoms" required />
+          </div>
+          <div>
+            <label for="ExerciseInduced">ExerciseInduced:</label>
+            <input type="number" id="ExerciseInduced" name="ExerciseInduced" required />
+          </div>
+          
+        </div>
+        <div class="form-submit">
+          <button type="submit">Make Prediction</button>
+        </div>
+      </form>
+    </div>
+    <div class="result-row">
+      <div id="predictionResult" class="result-box">The Result</div>
+    </div>
+    <footer>
+      <p>Created by Hanin Alomar<i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+      function openNav() {
+        document.getElementById("mySidebar").classList.add("open");
+        document.querySelector(".openbtn").classList.add("hidden");
+      }
+
+      function closeNav() {
+        document.getElementById("mySidebar").classList.remove("open");
+        document.querySelector(".openbtn").classList.remove("hidden");
+      }
+
+      document.getElementById("knn-form").onsubmit = async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const formObject = Object.fromEntries(formData.entries());
+
+        const knnResultBox = document.getElementById("predictionResult");
+
+        try {
+          const response = await fetch('{{ url_for("page12") }}', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formObject),
+          });
+
+          const result = await response.json();
+          the_result = result.Asthma;
+          if (result.Asthma === 0) {
+            knnResultBox.textContent = "Dont have Asthma";
+            knnResultBox.className = "result-box low-risk";
+          }
+          if (result.Asthma === 1) {
+            knnResultBox.textContent = "Have Asthma";
+            knnResultBox.className = "result-box low2-risk";
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          predictionResult.textContent = "Error Occurred";
+          predictionResult.className = "result-box high-risk";
+        }
+      };
+    </script>
+  </body>
+</html>
