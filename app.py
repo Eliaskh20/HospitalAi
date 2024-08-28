@@ -21,6 +21,9 @@ blood_glucose_selector = joblib.load('selectorBloodGlucose.pkl')
 # Nayaz
 heart_disease_model = pickle.load(open('heart_disease_pred.sav', 'rb'))
 
+# Nayaz2
+Breast_cancer_model = pickle.load(open('Breast_Cancer_pred.sav', 'rb'))
+
 # Amaar
 with open('Parkinsson_model.pkl', 'rb') as file:
     parkinsson_model = pickle.load(file)
@@ -355,6 +358,47 @@ def page12():
 
     # Render the HTML page for GET requests
     return render_template('page12.html')
+
+
+#nayaz2
+@app.route('/page10', methods=['GET', 'POST'])
+def page10():
+    if request.method == 'POST':
+        data = request.json
+        try:
+            # استخراج الفيتشرات الجديدة والتحقق من صحتها
+            input_data = [
+                float(data.get('mean_radius', 0.0)),
+                float(data.get('mean_texture', 0.0)),
+                float(data.get('mean_perimeter', 0.0)),
+                float(data.get('mean_area', 0.0)),
+                float(data.get('mean_smoothness', 0.0))
+            ]
+
+            # تحويل البيانات إلى مصفوفة numpy وتغيير شكلها لتناسب المدخلات النموذجية
+            input_data_as_numpy_array = np.asarray(input_data)
+            input_data_reshaped = input_data_as_numpy_array.reshape(1, -1)
+
+            # التنبؤ باستخدام النموذج
+            prediction = Breast_cancer_model.predict(input_data_reshaped)
+
+            # تحديد التشخيص بناءً على التنبؤ
+            if prediction[0] == 0:
+                diagnosis = 'Low Risk Detected'
+            else:
+                diagnosis = 'High Risk Detected'
+
+            # إرجاع استجابة JSON بالتشخيص
+            return jsonify({'diagnosis': diagnosis})
+
+        except ValueError as ve:
+            return jsonify({'error': f'Invalid input data: {str(ve)}'}), 400
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    # عرض قالب page2.html عند الطلب GET
+    return render_template('page10.html')
+
 
 
 if __name__ == '__main__':
