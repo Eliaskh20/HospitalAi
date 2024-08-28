@@ -17,6 +17,10 @@ blood_glucose_scaler = joblib.load('scalerBloodGlucose.pkl')
 blood_glucose_selector = joblib.load('selectorBloodGlucose.pkl')
 
 
+#DEMA
+Blood_DModel = joblib.load('knn_Blood_DModel.pkl')
+scalarBD = joblib.load('scalarBD.pkl')
+
 
 # Nayaz
 heart_disease_model = pickle.load(open('heart_disease_pred.sav', 'rb'))
@@ -302,6 +306,59 @@ def page6():
 
     # Render the HTML page for GET requests
     return render_template('page6.html')
+
+
+
+
+@app.route('/page8', methods=['GET', 'POST'])
+def page8():
+    if request.method == 'POST':
+        data = request.json
+        is_valid, error_message = validate_input(data)
+        if not is_valid:
+            return jsonify({'error': error_message}), 400
+        try:
+            input_features8 = np.array([[
+                data['Glucose'],
+                data['Cholesterol'],
+                data['Hemoglobin'],
+                data['Platelets'],
+                data['WhiteBloodCells'],
+                data['RedBloodCells'],
+                data['Hematocrit'],
+                data['MeanCorpuscularVolume'],
+                data['MeanCorpuscularHemoglobin'],
+                data['MeanCorpuscularHemoglobinConcentration'],
+                data['Insulin'],
+                data['BMI'],
+                data['SystolicBloodPressure'],
+                data['DiastolicBloodPressure'],
+                data['Triglycerides'],
+                data['HbA1c'],
+                data['LDLCholesterol'],
+                data['HDLCholesterol'],
+                data['ALT'],
+                data['AST'],
+                data['HeartRate'],
+                data['Creatinine'],
+                data['Troponin'],
+                data['CReactiveProtein']
+            ]])
+            scaled_features8 = scalarBD.transform(input_features8)
+
+            blood_disease_prediction = Blood_DModel.predict(scaled_features8)[0]
+
+            return jsonify({
+                'blood_glucose_prediction': int(blood_disease_prediction )
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    return render_template('page8.html')
+
+
+
 
 @app.route('/page11', methods=['GET', 'POST'])
 def page11():
