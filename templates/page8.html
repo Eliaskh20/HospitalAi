@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Data Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: green;
+        }
+
+        form {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .form-group div {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .form-group div:last-child {
+            margin-right: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/predict" method="POST">
+        <h1>Health Data Input Form</h1>
+
+        <!-- عرض النتيجة إذا كانت موجودة -->
+        {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+        {% endif %}
+
+        <div class="form-group">
+            <div>
+                <label for="Glucose">Glucose:</label>
+                <input type="number" id="Glucose" name="Glucose" step="any" required>
+            </div>
+            <div>
+                <label for="Cholesterol">Cholesterol:</label>
+                <input type="number" id="Cholesterol" name="Cholesterol" step="any" required>
+            </div>
+            <div>
+                <label for="Hemoglobin">Hemoglobin:</label>
+                <input type="number" id="Hemoglobin" name="Hemoglobin" step="any" required>
+            </div>
+            <div>
+                <label for="Platelets">Platelets:</label>
+                <input type="number" id="Platelets" name="Platelets" step="any" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="WhiteBloodCells">White Blood Cells:</label>
+                <input type="number" id="WhiteBloodCells" name="WhiteBloodCells" step="any" required>
+            </div>
+            <div>
+                <label for="RedBloodCells">Red Blood Cells:</label>
+                <input type="number" id="RedBloodCells" name="RedBloodCells" step="any" required>
+            </div>
+            <div>
+                <label for="Hematocrit">Hematocrit:</label>
+                <input type="number" id="Hematocrit" name="Hematocrit" step="any" required>
+            </div>
+            <div>
+                <label for="MeanCorpuscularVolume">Mean Corpuscular Volume:</label>
+                <input type="number" id="MeanCorpuscularVolume" name="MeanCorpuscularVolume" step="any" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="MeanCorpuscularHemoglobin">Mean Corpuscular Hemoglobin:</label>
+                <input type="number" id="MeanCorpuscularHemoglobin" name="MeanCorpuscularHemoglobin" step="any" required>
+            </div>
+            <div>
+                <label for="MeanCorpuscularHemoglobinConcentration">Mean Corpuscular Hemoglobin Concentration:</label>
+                <input type="number" id="MeanCorpuscularHemoglobinConcentration" name="MeanCorpuscularHemoglobinConcentration" step="any" required>
+            </div>
+            <div>
+                <label for="Insulin">Insulin:</label>
+                <input type="number" id="Insulin" name="Insulin" step="any" required>
+            </div>
+            <div>
+                <label for="BMI">BMI:</label>
+                <input type="number" id="BMI" name="BMI" step="any" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="SystolicBloodPressure">Systolic Blood Pressure:</label>
+                <input type="number" id="SystolicBloodPressure" name="SystolicBloodPressure" step="any" required>
+            </div>
+            <div>
+                <label for="DiastolicBloodPressure">Diastolic Blood Pressure:</label>
+                <input type="number" id="DiastolicBloodPressure" name="DiastolicBloodPressure" step="any" required>
+            </div>
+            <div>
+                <label for="Triglycerides">Triglycerides:</label>
+                <input type="number" id="Triglycerides" name="Triglycerides" step="any" required>
+            </div>
+            <div>
+                <label for="HbA1c">HbA1c:</label>
+                <input type="number" id="HbA1c" name="HbA1c" step="any" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="LDLCholesterol">LDL Cholesterol:</label>
+                <input type="number" id="LDLCholesterol" name="LDLCholesterol" step="any" required>
+            </div>
+            <div>
+                <label for="HDLCholesterol">HDL Cholesterol:</label>
+                <input type="number" id="HDLCholesterol" name="HDLCholesterol" step="any" required>
+            </div>
+            <div>
+                <label for="ALT">ALT:</label>
+                <input type="number" id="ALT" name="ALT" step="any" required>
+            </div>
+            <div>
+                <label for="AST">AST:</label>
+                <input type="number" id="AST" name="AST" step="any" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="HeartRate">Heart Rate:</label>
+                <input type="number" id="HeartRate" name="HeartRate" step="any" required>
+            </div>
+            <div>
+                <label for="Creatinine">Creatinine:</label>
+                <input type="number" id="Creatinine" name="Creatinine" step="any" required>
+            </div>
+            <div>
+                <label for="Troponin">Troponin:</label>
+                <input type="number" id="Troponin" name="Troponin" step="any" required>
+            </div>
+            <div>
+                <label for="CReactiveProtein">C-reactive Protein:</label>
+                <input type="number" id="CReactiveProtein" name="CReactiveProtein" step="any" required>
+            </div>
+        </div>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
