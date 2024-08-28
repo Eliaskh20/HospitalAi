@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/header-main.jpg') }}" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="{{ url_for('page1') }}">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+        <a href="{{ url_for('page2') }}">
+            <i class="fas fa-heartbeat"></i> Heart Disease
+        </a>
+
+        <a href="{{ url_for('page3') }}">
+            <i class="fas fa-brain"></i> Parkinson Disease
+        </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+        <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+        <a href="{{ url_for('page10') }}">
+           <i class="fas fa-poll"></i> Breast cancer
+        </a>
+    </div>
+
+    <button class="openbtn" onclick="openNav()">☰</button>
+
+    <div class="main-content">
+        <!-- Existing Heart Disease Prediction Form -->
+        <form id="knn-form" action="{{ url_for('page10') }}" method="post">
+            <h1>Breast cancer Prediction</h1>
+
+            <div class="form-rowfour">
+                <div>
+                    <label for="mean_radius">Mean Radius:</label>
+                    <input type="number" id="mean_radius" name="mean_radius" step="0.01" required>
+                </div>
+                <div>
+                    <label for="mean_texture">Mean Texture:</label>
+                    <input type="number" id="mean_texture" name="mean_texture" step="0.01" required>
+                </div>
+                <div>
+                    <label for="mean_perimeter">Mean Perimeter:</label>
+                    <input type="number" id="mean_perimeter" name="mean_perimeter" step="0.01" required>
+                </div>
+                <div>
+                    <label for="mean_area">Mean Area:</label>
+                    <input type="number" id="mean_area" name="mean_area" step="0.01" required>
+                </div>
+            </div>
+            <div class="form-rowfour">
+                <div>
+                    <label for="mean_smoothness">Mean Smoothness:</label>
+                    <input type="number" id="mean_smoothness" name="mean_smoothness" step="0.01" required>
+                </div>
+
+            </div>
+            <div class="form-submit">
+                <button type="submit">Make Prediction</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="result-row">
+        <div id="cancer" class="result-box">The Diagnosis Result</div>
+    </div>
+
+    <footer>
+        <p>تم إنشاء هذا النموذج بواسطة نياز النجار <i class="fas fa-heart"></i></p>
+    </footer>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").classList.add("open");
+            document.querySelector(".openbtn").classList.add("hidden");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("open");
+            document.querySelector(".openbtn").classList.remove("hidden");
+        }
+
+        document.getElementById('knn-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const diagnosisBox = document.getElementById('cancer');
+
+            try {
+                const response = await fetch('{{ url_for('page10') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const result = await response.json();
+                diagnosisBox.textContent = result.diagnosis;
+
+                if (result.diagnosis.includes('High Risk Detected')) {
+                    diagnosisBox.className = 'result-box high-risk';
+                } else {
+                    diagnosisBox.className = 'result-box low-risk';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                diagnosisBox.textContent = 'Error Occurred';
+                diagnosisBox.className = 'result-box high-risk';
+            }
+        };
+
+        document.getElementById('feature-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const diagnosisBox = document.getElementById('diagnosis-result');
+
+            try {
+                const response = await fetch('{{ url_for('page10') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const result = await response.json();
+                diagnosisBox.textContent = result.diagnosis;
+
+                if (result.diagnosis.includes('malignant')) {
+                    diagnosisBox.className = 'result-box high-risk';
+                } else {
+                    diagnosisBox.className = 'result-box low-risk';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                diagnosisBox.textContent = 'Error Occurred';
+                diagnosisBox.className = 'result-box high-risk';
+            }
+        };
+    </script>
+</body>
+</html>
