@@ -31,6 +31,8 @@ with open('Parkinsson_model.pkl', 'rb') as file:
 # Ayman
 with open('thyroid_disease_detection.sav', 'rb') as file:
     thyroid_model = joblib.load(file)
+with open('alzheimer_disease_detection.sav', 'rb') as file:
+    alzheimer_model = joblib.load(file)
 
 # Maha
 Hepatitis_model = joblib.load('Hepatitis_model.pkl')
@@ -192,6 +194,40 @@ def page4():
             return jsonify({'error': str(e)}), 500
 
     return render_template('page4.html')
+
+@app.route('/page7', methods=['GET', 'POST'])
+def page7():
+    if request.method == 'POST':
+        data = request.json
+        try:
+            input_features = pd.DataFrame({
+                'FunctionalAssessment': [float(data.get('FunctionalAssessment', 0.00))],
+                'ADL': [float(data.get('ADL', 0.00))],
+                'MemoryComplaints': [int(data.get('MemoryComplaints', 0))],
+                'MMSE': [float(data.get('MMSE', 0.00))],
+                'BehavioralProblems': [int(data.get('BehavioralProblems', 0))],
+                'Age': [int(data.get('Age', 0))],
+                'Smoking': [int(data.get('Smoking', 0))],
+                'SleepQuality': [float(data.get('SleepQuality', 0.00))]
+            })
+            print(input_features)
+            prediction = alzheimer_model.predict(input_features)[0]
+
+            if prediction == 1:
+                resul = 'He has Alzheimer '
+            else:
+                resul = 'He does not have Alzheimer'
+
+            print(resul)
+            return jsonify({'diagnosis': resul})
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    return render_template('page7.html')
+
+
+
 
 @app.route('/page5', methods=['GET', 'POST'])
 def page5():
