@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alzheimer Disease Prediction</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/header-main.jpg') }}" alt="Header Image">
+        <h1>شركة هوميتكس الهندسية لتكنولوجيا المعلومات</h1>
+        <h3>معكم نحو تكنولوجيا أفضل</h3>
+    </header>
+    <h1 class="project_name">Homedical Assistant</h1>
+    <div id="mySidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">&times;</button>
+
+        <a href="{{ url_for('index') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+
+        <a href="page1">
+            <i class="fas fa-vial"></i> Blood Glucose
+        </a>
+         <a href="page2">
+             <i class="fas fa-heartbeat"></i> Heart Disease
+         </a>
+
+         <a href="page3">
+             <i class="fas fa-brain"></i> Parkinson Disease
+         </a>
+        <a href="{{ url_for('page4') }}">
+            <i class="fas fa-pills"></i> Thyroid Disease
+        </a>
+        <a href="{{ url_for('page5') }}">
+           <i class="fas fa-virus"></i> Hepatitis Disease
+        </a>
+        <a href="{{ url_for('page6') }}">
+           <i class="fas fa-poll"></i> Depression Test
+        </a>
+        <a href="{{ url_for('page7') }}">
+            <i class="fas fa-poll"></i> Alzheimer Disease
+         </a>
+
+
+    </div>
+
+<button class="openbtn" onclick="openNav()">☰</button>
+    <div class="main-content">
+        <form id="knn-form" action="{{ url_for('page7') }}" method="post">
+                    <h1>Alzheimer Disease Prediction</h1>
+
+            <div class="form-row">
+                <div>
+                    <label for="FunctionalAssessment">FunctionalAssessment:ranging from 0 to 10</label>
+                    <input type="number" id="FunctionalAssessment" name="FunctionalAssessment" min="0" max="10" required step="0.01">
+                </div>
+                <div>
+                    <label for="ADL">ADL:Activities of Daily Living ,ranging from 0 to 10</label>
+                    <input type="number" id="ADL" name="ADL" min="0" max="10" step="0.01" required>
+
+                   
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="MemoryComplaints">MemoryComplaints:</label>
+                    <select id="MemoryComplaints" name="MemoryComplaints" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                    
+                </div>
+                <div>
+                    <label for="MMSE">MMSE:Mini-Mental State Examination, ranging from 0 to 30</label>
+                    <input type="number" id="MMSE" name="MMSE" min="0" max="30" required step="0.01">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label for="BehavioralProblems">BehavioralProblems:</label>
+                    <select id="BehavioralProblems" name="BehavioralProblems" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div>
+                    <div>
+                        <label for="Age">Age:</label>
+                        <input type="number" id="Age" name="Age" step="1">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                
+                <div>
+                    <label for="Smoking">Smoking:</label>
+                    <select id="Smoking" name="Smoking" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="SleepQuality">SleepQuality:ranging from 4 to 10.</label>
+                    <input type="number" id="SleepQuality" name="SleepQuality" min="4" max="10" required step="0.01">
+                </div>
+            </div>
+            
+            <div class="form-submit">
+                 <button type="submit">Make Prediction</button>
+            </div>
+        </form>
+    </div>
+    <div class="result-row">
+        <div id="resul" class="result-box"> The Result </div>
+    </div>
+    <footer>
+     <p>Create this model by Ayman AlShaar <i class="fas fa-heart"></i></p>
+    </footer>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").classList.add("open");
+            document.querySelector(".openbtn").classList.add("hidden");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").classList.remove("open");
+            document.querySelector(".openbtn").classList.remove("hidden");
+        }
+
+
+
+        document.getElementById('knn-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const formObject = Object.fromEntries(formData.entries());
+
+            const diagnosisBox = document.getElementById('resul');
+
+            try {
+                const response = await fetch('/page7', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const result = await response.json();
+                diagnosisBox.textContent = result.diagnosis;
+
+                if (result.diagnosis.includes('He does not have Alzheimer')) {
+                    diagnosisBox.className = 'result-box low-risk';
+                } else {
+                    diagnosisBox.className = 'result-box high-risk';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                diagnosisBox.textContent = 'Error Occurred';
+                diagnosisBox.className = 'result-box high-risk';
+            }
+        };
+</script>
+
+</body>
+</html>
