@@ -24,9 +24,12 @@ heart_disease_model = pickle.load(open('heart_disease_pred.sav', 'rb'))
 # Nayaz2
 Breast_cancer_model = pickle.load(open('Breast_Cancer_pred.sav', 'rb'))
 
-# Amaar
+# Ammar
 with open('Parkinsson_model.pkl', 'rb') as file:
     parkinsson_model = pickle.load(file)
+    
+Stroke_model = joblib.load('Stroke_model.pkl')
+Stroke_scaler = joblib.load('Stroke_scaler.pkl')
 
 # Ayman
 with open('thyroid_disease_detection.sav', 'rb') as file:
@@ -434,7 +437,46 @@ def page10():
 
     # عرض قالب page2.html عند الطلب GET
     return render_template('page10.html')
+    
+@app.route('/page7s', methods=['GET', 'POST'])
+def page7s():
+    if request.method == 'POST':
+        try:
+            # Extract JSON data from the request
+            data = request.json
 
+            # Extract features and convert to integers
+            features = [[
+                int(data.get('gender', 0)),
+                int(data.get('age', 0)),
+                int(data.get('hypertension', 0)),
+                int(data.get('heart_disease', 0)),
+                int(data.get('ever_married', 0)),
+                int(data.get('work_type', 0)),
+                int(data.get('Residence_type', 0)),
+                float(data.get('avg_glucose_level', 0.0)),
+                float(data.get('bmi', 0.0)),
+                int(data.get('smoking_status', 0))
+            ]]
+            
+            # Scale the data
+            scaled_data = Stroke_scaler.transform(features)
+            print(features)
+            print(scaled_data)
+
+            # Make prediction
+            prediction = Stroke_model.predict(scaled_data)[0]
+            print(prediction)
+
+            # Return prediction as JSON
+            return jsonify({'Stroke': int(prediction)})
+
+        except Exception as e:
+            # Return error message as JSON
+            return jsonify({'error': str(e)}), 500
+
+    # Render the HTML page for GET requests
+    return render_template('page7s.html')
 
 
 if __name__ == '__main__':
