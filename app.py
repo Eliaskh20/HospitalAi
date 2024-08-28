@@ -32,7 +32,10 @@ with open('thyroid_disease_detection.sav', 'rb') as file:
 # Maha
 Hepatitis_model = joblib.load('Hepatitis_model.pkl')
 Hepatitis_scaler = joblib.load('Hepatitis_scalar.pkl')
+Hypertension_model = joblib.load('Hypertension_model.pkl')
 
+# Hanin
+Asthma_model = joblib.load('Asthma_model.pkl')
 
 
 # Load the LightGBM model
@@ -257,6 +260,101 @@ def page6():
 
     # Render the HTML page for GET requests
     return render_template('page6.html')
+
+@app.route('/page11', methods=['GET', 'POST'])
+def page11():
+    if request.method == 'POST':
+        try:
+            # Extract JSON data from the request
+            data = request.json
+
+            # Extract features 
+            features = [
+                data.get('age', 0),
+                data.get('sex' , 0),
+                data.get('cp', 0),
+                data.get('trestbps' , 0),
+                data.get('chol', 0),
+                data.get('fbs', 0),
+                data.get('restecg', 0),
+                data.get('thalach' , 0),
+                data.get('exang' , 0),
+                data.get('oldpeak' , 0),
+                data.get('slope' , 0),
+                data.get('ca' , 0),
+                data.get('thal', 0)
+
+            ]
+
+    
+            # Convert features to numpy array and reshape for the model
+            features_array = np.array([features])
+            print(features_array)
+
+            # Make prediction
+            prediction = Hypertension_model.predict(features_array)[0]
+
+            # Return prediction as JSON
+            return jsonify({'Hypertension': int(prediction)})
+
+        except Exception as e:
+            # Return error message as JSON
+            return jsonify({'error': str(e)}), 500
+
+    # Render the HTML page for GET requests
+    return render_template('page11.html')
+
+
+@app.route('/page12', methods=['GET', 'POST'])
+def page12():
+    if request.method == 'POST':
+        try:
+            # Extract JSON data from the request
+            data = request.json
+
+            # Extract features and convert to integers
+            features = [
+               data.get('Age', 0),
+               data.get('Gender', 0),
+               data.get('Ethnicity', 0),
+               data.get('Smoking', 0),
+               data.get('PhysicalActivity', 0),
+               data.get('DietQuality', 0),
+               data.get('SleepQuality', 0),
+               data.get('PollenExposure', 0),
+               data.get('DustExposure', 0),
+               data.get('FamilyHistoryAsthma', 0),
+               data.get('HistoryOfAllergies', 0),
+               data.get('Eczema', 0),
+               data.get('HayFever', 0),
+               data.get('GastroesophagealReflux', 0),
+               data.get('LungFunctionFEV1', 0),
+               data.get('Wheezing', 0),
+               data.get('ChestTightness', 0),
+               data.get('Coughing', 0),
+               data.get('NighttimeSymptoms', 0),
+               data.get('ExerciseInduced', 0),
+               
+        
+
+            ]
+
+            # Convert features to numpy array and reshape for the model
+            features_array = np.array([features])
+            print(features_array)
+
+            # Make prediction
+            prediction = Asthma_model.predict(features_array)[0]
+
+            # Return prediction as JSON
+            return jsonify({'Asthma': int(prediction)})
+
+        except Exception as e:
+            # Return error message as JSON
+            return jsonify({'error': str(e)}), 500
+
+    # Render the HTML page for GET requests
+    return render_template('page12.html')
 
 
 if __name__ == '__main__':
