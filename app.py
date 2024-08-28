@@ -49,6 +49,9 @@ Hypertension_model = joblib.load('Hypertension_model.pkl')
 # Hanin
 Asthma_model = joblib.load('Asthma_model.pkl')
 
+# gharam
+Lung_cancer_model = pickle.load(open('LUNG_CANCERfinal (1).sav', 'rb'))
+
 
 # Load the LightGBM model
 Deepression_model = joblib.load('Deepression_model.pkl')
@@ -534,6 +537,59 @@ def page7s():
 
     # Render the HTML page for GET requests
     return render_template('page7s.html')
+
+
+
+@app.route('/page11', methods=['GET', 'POST'])
+def page11():
+    global resul
+    if request.method == 'POST':
+        try:
+            data = request.json
+            input_features = np.array([[
+                data.get('GENDER', 0),
+                data.get('AGE', 0),
+                data.get('SMOKING', 0),
+                data.get('YELLOW_FINGERS', 0),
+                data.get('ANXIETY', 0),
+                data.get('PEER_PRESSURE', 0),
+                data.get('CHRONIC_DISEASE', 0),
+                data.get('FATIGUE', 0),
+                data.get('ALLERGY', 0),
+                data.get('WHEEZING', 0),
+                data.get('ALCOHOL_CONSUMING', 0),
+                data.get('COUGHING', 0),
+                data.get('SHORTNESS_OF_BREATH', 0),
+                data.get('SWALLOWING_DIFFICULTY', 0),
+                data.get('CHEST_PAIN', 0)
+            ]])
+
+            input_data_reshaped = input_features.reshape(1, -1)
+            lung_cancer_prediction = Lung_cancer_model.predict(input_data_reshaped)[0]
+            if lung_cancer_prediction == 1:
+                resul = 'High Risk Detected'
+            elif lung_cancer_prediction == 0:
+                resul = 'Low Risk Detected'
+            print(input_features)
+            return jsonify({'lung_cancer_prediction': resul})
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    return render_template('page11.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
